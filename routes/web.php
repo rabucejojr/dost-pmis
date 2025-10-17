@@ -2,9 +2,10 @@
 
 use Inertia\Inertia;
 use App\Models\Program;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ProjectController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -30,6 +31,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('programs', ProgramController::class)->only(['index', 'show']);
+Route::resource('projects', ProjectController::class);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

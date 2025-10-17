@@ -46,4 +46,21 @@ export interface Program {
   type: string
 }
 
+export interface Project {
+    program: any;
+    id: number
+    program_id: number
+    user_id: number
+    title: string
+    description: string
+    location: string
+    status: string
+    budget: number
+    start_date: date
+    end_date: date
+    project_leader: string
+    contact_email: string
+}
+
+
 export type BreadcrumbItemType = BreadcrumbItem;
