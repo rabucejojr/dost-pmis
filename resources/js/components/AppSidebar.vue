@@ -12,9 +12,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { route } from 'ziggy-js';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { FileChartColumnIncreasing, Layers, LayoutGrid, Trophy } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -23,31 +24,30 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
-        {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: BookOpen,
-    },
-        {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: Folder,
-    },
     {
         title: 'Program',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: Layers,
         children: [
-            { title: 'SETUP', href: '/projects/active' },
-            { title: 'LGIA', href: '/projects/completed' },
-            { title: 'SSCP', href: '/projects' },
-            { title: 'CEST', href: '/projects' },
+            { title: 'SETUP', href: route('projects.index', { program: 1 }) },
+            { title: 'LGIA', href: route('projects.index', { program: 2 }) },
+            { title: 'SSCP', href: route('projects.index', { program: 3 }) },
+            { title: 'CEST', href: route('projects.index', { program: 4 }) },
+        ],
+    },
+    {
+        title: 'Accomplishment',
+        href: dashboard(),
+        icon: Trophy,
+        children: [
+            { title: 'Financial', href: route('projects.index', { program: 1 }) },
+            { title: 'Physical', href: route('projects.index', { program: 2 }) },
         ],
     },
     {
         title: 'Reports',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: FileChartColumnIncreasing,
         children: [
             { title: 'Annual', href: '/projects/active' },
             { title: 'Quarterly', href: '/projects/completed' },
