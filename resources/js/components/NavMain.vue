@@ -28,7 +28,6 @@ const toggleDropdown = (title: string) => {
 
 <template>
     <SidebarGroup class="px-2 py-0">
-        <SidebarGroupLabel>Platform</SidebarGroupLabel>
 
         <SidebarMenu>
             <template v-for="item in items" :key="item.title">
