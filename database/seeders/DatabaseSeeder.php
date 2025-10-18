@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ProjectSeeder::class,
             ProjectStaffSeeder::class,
             ActivitySeeder::class,
+            RolePermissionSeeder::class,
             // Add other seeders here as needed
         ]);
     }
