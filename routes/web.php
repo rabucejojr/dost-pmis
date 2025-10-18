@@ -12,25 +12,6 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-// Route::get('dashboard', function () {
-//     return Inertia::render('Dashboard',[
-//         'programs'=>$programs,
-//     ]);
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-
-Route::get('/dashboard', function () {
-    $programs = Cache::remember('programs_list', now()->addHours(6), function () {
-        return Program::select('id', 'program_name', 'description', 'slug', 'type')
-            ->orderBy('program_name')
-            ->get();
-    });
-
-    return Inertia::render('Dashboard', [
-        'programs' => $programs, // ✅ Must be passed here
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::get('/dashboard', function () {
     $programs = Cache::remember('programs_list', now()->addHours(6), function () {
@@ -54,9 +35,25 @@ Route::get('/guest', fn() => Inertia::render('Guest'))
     ->name('guest');
 
 
-Route::resource('programs', ProgramController::class)->only(['index', 'show']);
-Route::resource('projects', ProjectController::class);
+Route::middleware(['auth'])->group(function () {
+    // Admin Routes
+    Route::middleware(['role:Admin'])->group(function () {
+        Route::resource('programs', ProgramController::class);
+        Route::resource('projects', ProjectController::class);
+    });
 
+    // User Routes
+    Route::middleware(['role:User'])->group(function () {
+        Route::resource('programs', ProgramController::class)->only(['index', 'show']);
+        Route::resource('projects', ProjectController::class)->only(['index', 'show']);
+    });
+
+    // Guest Routes (Authenticated Guest Account)
+    Route::middleware(['role:Guest'])->group(function () {
+        Route::resource('programs', ProgramController::class)->only(['index', 'show']);
+        Route::resource('projects', ProjectController::class)->only(['index', 'show']);
+    });
+});
 
 
 require __DIR__.'/settings.php';
