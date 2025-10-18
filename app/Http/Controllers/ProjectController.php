@@ -9,13 +9,13 @@ use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * Example routes:
-     *  - /projects               → all projects
-     *  - /projects?program=3     → projects under specific program
-     */
+
+    public function __construct()
+    {
+        // Allow only Admins to modify project data.
+        // Users and Guests can only access index() and show().
+        $this->middleware('role:Admin')->except(['index', 'show']);
+    }
     public function index(Request $request)
     {
         $programId = $request->query('program');
@@ -155,4 +155,5 @@ class ProjectController extends Controller
             ->route('projects.index')
             ->with('success', 'Project deleted successfully.');
     }
+
 }

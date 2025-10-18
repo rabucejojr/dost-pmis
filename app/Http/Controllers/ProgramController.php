@@ -6,11 +6,17 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+
 class ProgramController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    public function __construct()
+    {
+        // Allow only Admins to modify program data.
+        // Users and Guests can only access index() and show().
+        $this->middleware('role:Admin')->except(['index', 'show']);
+    }
+    
     public function index()
     {
         $programs = Program::select('id', 'program_name', 'description',  'slug', 'type')->get();
