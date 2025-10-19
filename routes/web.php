@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\Guest\DashboardController as GuestDashboardController;
+
 
 
 Route::get('/', function () {
@@ -44,14 +47,12 @@ Route::middleware(['auth'])->group(function () {
 
     // User Routes
     Route::middleware(['role:User'])->group(function () {
-        Route::resource('programs', ProgramController::class)->only(['index', 'show']);
-        Route::resource('projects', ProjectController::class)->only(['index', 'show']);
+        Route::get('/user', [UserDashboardController::class, 'index'])->name('user');
     });
 
     // Guest Routes (Authenticated Guest Account)
     Route::middleware(['role:Guest'])->group(function () {
-        Route::resource('programs', ProgramController::class)->only(['index', 'show']);
-        Route::resource('projects', ProjectController::class)->only(['index', 'show']);
+        Route::get('/guest', [GuestDashboardController::class, 'index'])->name('guest');
     });
 });
 
