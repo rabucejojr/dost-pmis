@@ -15,7 +15,7 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // Clear cache
+        // 🔄 Clear cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         DB::transaction(function () {
@@ -36,7 +36,7 @@ class RolePermissionSeeder extends Seeder
                 ]);
             }
 
-            // 2️⃣ Define roles and assign permissions
+            // 2️⃣ Define roles and their permissions
             $roles = [
                 'Admin' => Permission::all()->pluck('name')->toArray(),
                 'User'  => ['view projects', 'create projects'],
@@ -52,24 +52,44 @@ class RolePermissionSeeder extends Seeder
                 $role->syncPermissions($rolePermissions);
             }
 
-            // 3️⃣ Create default Admin user (if not exists)
+            // 3️⃣ Create default Admin
             $admin = User::firstOrCreate(
                 ['email' => 'admin@dost.gov.ph'],
                 [
                     'name' => 'System Administrator',
-                    'password' => Hash::make('password'), // change this in production
+                    'password' => Hash::make('password'), // ⚠️ change in production
                     'user_type' => UserType::ADMIN,
                 ]
             );
+            $admin->assignRole('Admin');
 
-            // Assign Admin role if not yet assigned
-            if (! $admin->hasRole('Admin')) {
-                $admin->assignRole('Admin');
-            }
+            // 4️⃣ Create default User
+            $user = User::firstOrCreate(
+                ['email' => 'user@dost.gov.ph'],
+                [
+                    'name' => 'Regular User',
+                    'password' => Hash::make('password'), // ⚠️ change in production
+                    'user_type' => UserType::USER,
+                ]
+            );
+            $user->assignRole('User');
 
-            // 4️⃣ Optional: Output summary to console
-            $this->command->info('✅ Roles, permissions, and default admin account seeded successfully!');
+            // 5️⃣ Create default Guest
+            $guest = User::firstOrCreate(
+                ['email' => 'guest@dost.gov.ph'],
+                [
+                    'name' => 'Guest Account',
+                    'password' => Hash::make('password'), // ⚠️ change in production
+                    'user_type' => UserType::GUEST,
+                ]
+            );
+            $guest->assignRole('Guest');
+
+            // 6️⃣ Output info to console
+            $this->command->info('✅ Roles, permissions, and default users created successfully!');
             $this->command->warn('👉 Admin login: admin@dost.gov.ph / password');
+            $this->command->warn('👉 User login: user@dost.gov.ph / password');
+            $this->command->warn('👉 Guest login: guest@dost.gov.ph / password');
         });
     }
 }
