@@ -10,12 +10,6 @@ use Inertia\Inertia;
 class ProjectController extends Controller
 {
 
-    public function __construct()
-    {
-        // Allow only Admins to modify project data.
-        // Users and Guests can only access index() and show().
-        $this->middleware('role:Admin')->except(['index', 'show']);
-    }
     public function index(Request $request)
     {
         $programId = $request->query('program');

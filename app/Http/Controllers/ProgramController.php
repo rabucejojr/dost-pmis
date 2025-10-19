@@ -9,13 +9,6 @@ use Inertia\Inertia;
 
 class ProgramController extends Controller
 {
-
-    public function __construct()
-    {
-        // Allow only Admins to modify program data.
-        // Users and Guests can only access index() and show().
-        $this->middleware('role:Admin')->except(['index', 'show']);
-    }
     
     public function index()
     {
