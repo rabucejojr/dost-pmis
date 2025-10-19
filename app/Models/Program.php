@@ -24,5 +24,9 @@ class Program extends Model
     {
         return $this->type->label();
     }
+        public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 
 }
