@@ -26,8 +26,9 @@ class DatabaseSeeder extends Seeder
             ProjectStaffSeeder::class,
             ActivitySeeder::class,
             RolePermissionSeeder::class,
-            ProjectSeeder::class,
-            // Add other seeders here as needed
+            PerspectiveSeeder::class,
+            ObjectiveSeeder::class,
+            IndicatorSeeder::class,
         ]);
     }
 }
