@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Perspective;
 use Illuminate\Database\Seeder;
-use Database\Seeders\ObjectiveSeeder;
+use App\Models\Perspective;
 
 class PerspectiveSeeder extends Seeder
 {
-    public function run($params = []): void
+    public function run(array $params = []): void
     {
         $project = $params['project'] ?? null;
+
         if (!$project) {
-            $this->command->warn('⚠️ No project passed to PerspectiveSeeder.');
+            $this->command?->warn('⚠️ No project passed to PerspectiveSeeder.');
             return;
         }
 
@@ -20,41 +20,45 @@ class PerspectiveSeeder extends Seeder
 
         $perspectives = [
             [
-                'project_id' => $project->id,
+                'project_id'        => $project->id,
                 'implementing_year' => $year,
-                'name' => 'Sustainable Development and Inclusive Growth',
-                'description' => 'Focuses on sustainability, environment, and community empowerment.',
+                'name'              => 'Sustainable Development and Inclusive Growth',
+                'description'       => 'Focuses on sustainability and community empowerment.',
             ],
             [
-                'project_id' => $project->id,
+                'project_id'        => $project->id,
                 'implementing_year' => $year,
-                'name' => 'Science, Technology, and Innovation Advancement',
-                'description' => 'Promotes applied research, technology transfer, and innovation.',
+                'name'              => 'Science, Technology, and Innovation Advancement',
+                'description'       => 'Promotes applied research and innovation.',
             ],
             [
-                'project_id' => $project->id,
+                'project_id'        => $project->id,
                 'implementing_year' => $year,
-                'name' => 'Digital Transformation and Smart Communities',
-                'description' => 'Supports e-governance and local digital transformation.',
+                'name'              => 'Digital Transformation and Smart Communities',
+                'description'       => 'Advances e-governance and smart solutions.',
             ],
             [
-                'project_id' => $project->id,
+                'project_id'        => $project->id,
                 'implementing_year' => $year,
-                'name' => 'Human Resource Development and Institutional Capacity',
-                'description' => 'Builds workforce and institutional excellence for S&T services.',
+                'name'              => 'Human Resource Development and Institutional Capacity',
+                'description'       => 'Strengthens HR and institutional capability.',
             ],
         ];
 
         foreach ($perspectives as $index => $data) {
             $perspective = Perspective::create($data);
+            $this->command?->info("🌱 Perspective Created: {$perspective->name}");
 
-            // Cascade down
-            $this->callWith(ObjectiveSeeder::class, [
-                'perspective' => $perspective,
-                'perspective_index' => $index + 1,
-            ]);
+            // ✅ Propagate parameters correctly
+            app(ObjectiveSeeder::class)
+                ->setContainer(app())
+                ->setCommand($this->command)
+                ->run([
+                    'perspective'       => $perspective,
+                    'perspective_index' => $index + 1,
+                ]);
         }
 
-        $this->command->info("✅ Seeded 4 perspectives for Project: {$project->title}");
+        $this->command?->info("✅ Seeded 4 perspectives for Project: {$project->title}");
     }
 }
