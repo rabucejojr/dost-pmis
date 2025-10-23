@@ -115,39 +115,88 @@ class ProjectController extends Controller
     /**
      * Update the specified project in storage.
      */
-    public function update(Request $request, Project $project)
-    {
-        $validated = $request->validate([
-            'program_id'      => 'required|exists:programs,id',
-            'user_id'         => 'required|integer',
-            'title'           => 'required|string|max:255',
-            'description'     => 'nullable|string',
-            'location'        => 'required|string|max:255',
-            'status'          => 'required|string|max:50',
-            'budget'          => 'required|numeric|min:0',
-            'start_date'      => 'required|date',
-            'end_date'        => 'required|date|after_or_equal:start_date',
-            'project_leader'  => 'required|string|max:255',
-            'contact_email'   => 'required|email|max:255',
-        ]);
+public function update(Request $request, Project $project)
+{
+    $validated = $request->validate([
+        // 🧩 Optional foreign keys, validated only if present
+        'program_id'      => 'nullable|exists:programs,id',
+        'user_id'         => 'nullable|integer|exists:users,id',
 
-        $project->update($validated);
+        // 📝 Core project fields
+        'title'           => 'required|string|max:255',
+        'description'     => 'nullable|string',
+        'location'        => 'nullable|string|max:255',
+        'status'          => 'nullable|string|max:50',
+        'budget'          => 'nullable|numeric|min:0',
 
-        return redirect()
-            ->route('projects.show', $project->id)
-            ->with('success', 'Project updated successfully.');
-    }
+        // 📅 Date fields
+        'start_date'      => 'nullable|date',
+        'end_date'        => 'nullable|date|after_or_equal:start_date',
 
-    /**
-     * Remove the specified project from storage.
+        // Leadership & contact
+        'project_leader'  => 'nullable|string|max:255',
+        'contact_email'   => 'nullable|email|max:255',
+    ]);
+
+    // Update with validated data only
+    $project->update($validated);
+
+    return redirect()
+        ->route('projects.show', $project->id)
+        ->with('success', '✅ Project updated successfully.');
+}
+
+
+  /**
+     * Soft delete the specified project.
      */
     public function destroy(Project $project)
     {
-        $project->delete();
+        $project->delete(); // Soft delete
 
         return redirect()
             ->route('projects.index')
-            ->with('success', 'Project deleted successfully.');
+            ->with('success', '🗑️ Project moved to trash.');
     }
+
+    /**
+     * Show all soft-deleted projects (Trash Bin).
+     */
+    // public function trashed()
+    // {
+    //     $trashed = Project::onlyTrashed()
+    //         ->orderByDesc('deleted_at')
+    //         ->get();
+
+    //     return Inertia::render('projects/trashed', [
+    //         'projects' => $trashed,
+    //     ]);
+    // }
+
+    /**
+     * Restore a soft-deleted project.
+     */
+    public function restore($id)
+    {
+        $project = Project::onlyTrashed()->findOrFail($id);
+        $project->restore();
+
+        return redirect()
+            ->route('projects.index')
+            ->with('success', '♻️ Project restored successfully.');
+    }
+
+    /**
+     * Permanently delete a soft-deleted project.
+     */
+    // public function forceDelete($id)
+    // {
+    //     $project = Project::onlyTrashed()->findOrFail($id);
+    //     $project->forceDelete();
+
+    //     return redirect()
+    //         ->route('projects.trashed')
+    //         ->with('success', '❌ Project permanently deleted.');
+    // }
 
 }

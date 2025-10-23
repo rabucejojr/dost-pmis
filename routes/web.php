@@ -43,6 +43,19 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:Admin'])->group(function () {
         Route::resource('programs', ProgramController::class);
         Route::resource('projects', ProjectController::class);
+
+        // 🗑️ Extra routes for soft delete management (Projects)
+        Route::prefix('projects')->name('projects.')->group(function () {
+        // View trashed (soft-deleted) projects
+        Route::get('/trashed', [ProjectController::class, 'trashed'])->name('trashed');
+
+        // Restore a soft-deleted project
+        Route::put('/{id}/restore', [ProjectController::class, 'restore'])->name('restore');
+
+        // Permanently delete a soft-deleted project
+        Route::delete('/{id}/force-delete', [ProjectController::class, 'forceDelete'])->name('forceDelete');
+    });
+
     });
 
     // User Routes
