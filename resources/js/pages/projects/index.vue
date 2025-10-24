@@ -7,7 +7,6 @@ import { route } from 'ziggy-js'
 import {
   MapPin,
   User,
-  Mail,
   Wallet,
   Clock,
   Plus,
