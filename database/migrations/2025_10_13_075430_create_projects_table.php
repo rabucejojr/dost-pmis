@@ -34,7 +34,6 @@ public function up(): void
         $table->string('contact_email')->nullable();
 
         $table->timestamps();
-        $table->softDeletes();
     });
 }
 

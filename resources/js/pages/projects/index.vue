@@ -14,6 +14,7 @@ import {
   Trash2,
   Eye,
   Search,
+  Archive,
 } from 'lucide-vue-next'
 import {
   Card,
@@ -26,7 +27,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -36,13 +36,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+// Props
 const props = defineProps<{
   program: Program | null
   projects: Project[]
 }>()
 
+// State
 const selectedProject = ref<Project | null>(null)
-const showDeleteModal = ref(false)
+const showArchiveModal = ref(false)
 const searchQuery = ref('')
 
 // Computed: Filter projects dynamically
@@ -70,23 +72,38 @@ function formatDate(value: string | Date): string {
   })
 }
 
+// Navigation
 const goToCreate = () => router.visit(route('projects.create'))
+const goToArchived = () => router.visit(route('projects.trashed'))
 
-const confirmDelete = (project: Project) => {
+// Modal actions
+const confirmArchive = (project: Project) => {
   selectedProject.value = project
-  showDeleteModal.value = true
+  showArchiveModal.value = true
 }
 
-const deleteProject = () => {
+const archiveProject = async () => {
   if (!selectedProject.value) return
 
-  router.delete(route('projects.destroy', selectedProject.value.id), {
-    onSuccess: () => {
-      showDeleteModal.value = false
-      selectedProject.value = null
-      router.visit(route('projects.trashed')) // 👈 redirect to archived
-    },
-  })
+  try {
+    await router.delete(route('projects.destroy', selectedProject.value.id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        showArchiveModal.value = false
+        selectedProject.value = null
+
+        // Wait a moment before navigating to ensure the record is deleted
+        setTimeout(() => {
+          router.visit(route('projects.trashed'))
+        }, 150)
+      },
+      onError: (errors) => {
+        console.error('Archive failed:', errors)
+      },
+    })
+  } catch (error) {
+    console.error('Unexpected error during archive:', error)
+  }
 }
 
 </script>
@@ -95,7 +112,9 @@ const deleteProject = () => {
   <AppLayout title="Projects">
     <section class="p-6 min-h-screen">
       <!-- Header -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4"
+      >
         <div>
           <h1 class="text-3xl font-bold">
             {{ program ? program.program_name : 'All Programs' }} Projects
@@ -105,21 +124,17 @@ const deleteProject = () => {
           </p>
         </div>
 
-            <!-- View Archived -->
-        <Button
-        variant="outline"
-        @click="router.visit(route('projects.trashed'))"
-        >
-        Archived Projects
-        </Button>
-
-
-        <Button @click="goToCreate">
-          <Plus class="w-4 h-4 mr-2" /> Add Project
-        </Button>
+        <div class="flex items-center gap-3">
+          <Button variant="outline" @click="goToArchived">
+            <Archive class="w-4 h-4 mr-2" /> Archived Projects
+          </Button>
+          <Button @click="goToCreate">
+            <Plus class="w-4 h-4 mr-2" /> Add Project
+          </Button>
+        </div>
       </div>
 
-      <!-- 🔍 Search Filter -->
+      <!-- 🔍 Search -->
       <div
         class="w-full sm:w-1/2 mb-10 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700"
       >
@@ -144,7 +159,7 @@ const deleteProject = () => {
         No projects found.
       </div>
 
-      <!-- Project Grid -->
+      <!-- Projects Grid -->
       <div
         v-else
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -202,45 +217,47 @@ const deleteProject = () => {
 
             <div class="flex items-center gap-2">
               <Button variant="link" size="sm" as-child>
-                <a :href="`/projects/${project.id}`"><Eye class="w-4 h-4" /></a>
+                <a :href="`/projects/${project.id}`">
+                  <Eye class="w-4 h-4" />
+                </a>
               </Button>
-              <Dialog>
-                <DialogTrigger as-child>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    @click.prevent="confirmDelete(project)"
-                  >
-                    <Trash2 class="w-4 h-4" />
-                  </Button>
-                </DialogTrigger>
-              </Dialog>
+
+              <!-- 🗑️ Archive Button -->
+              <Button
+                variant="destructive"
+                size="sm"
+                @click.prevent="confirmArchive(project)"
+              >
+                <Trash2 class="w-4 h-4" />
+              </Button>
             </div>
           </CardFooter>
         </Card>
       </div>
 
-      <!-- Delete Confirmation Modal -->
-      <Dialog v-model:open="showDeleteModal">
+      <!-- 🗂️ Archive Confirmation Modal -->
+      <Dialog v-model:open="showArchiveModal">
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Project</DialogTitle>
+            <DialogTitle>Archive Project</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete
-              <span class="font-semibold text-red-600">{{
+              Are you sure you want to archive
+              <span class="font-semibold text-blue-600">{{
                 selectedProject?.title
               }}</span
-              >? This action cannot be undone.
+              >?
+              <br />
+              You can restore it later from the Archived Projects section.
             </DialogDescription>
           </DialogHeader>
 
           <DialogFooter class="flex justify-end gap-3 mt-4">
-            <Button variant="outline" @click="showDeleteModal = false"
-              >Cancel</Button
-            >
-            <Button variant="destructive" @click="deleteProject"
-              >Confirm Delete</Button
-            >
+            <Button variant="outline" @click="showArchiveModal = false">
+              Cancel
+            </Button>
+            <Button variant="destructive" @click="archiveProject">
+              Confirm Archive
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

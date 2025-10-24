@@ -47,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
         // 🗑️ Extra routes for soft delete management (Projects)
         Route::prefix('projects')->name('projects.')->group(function () {
         // View trashed (soft-deleted) projects
-        Route::get('/trashed', [ProjectController::class, 'trashed'])->name('trashed');
+        Route::get('projects/trashed', [ProjectController::class, 'trashed'])->name('trashed');
 
         // Restore a soft-deleted project
         Route::put('/{id}/restore', [ProjectController::class, 'restore'])->name('restore');

@@ -162,16 +162,16 @@ public function update(Request $request, Project $project)
     /**
      * Show all soft-deleted projects (Trash Bin).
      */
-    // public function trashed()
-    // {
-    //     $trashed = Project::onlyTrashed()
-    //         ->orderByDesc('deleted_at')
-    //         ->get();
+    public function trashed()
+    {
+        $trashed = Project::onlyTrashed()
+            ->orderByDesc('deleted_at')
+            ->get();
 
-    //     return Inertia::render('projects/trashed', [
-    //         'projects' => $trashed,
-    //     ]);
-    // }
+        return Inertia::render('projects/trashed', [
+            'projects' => $trashed,
+        ]);
+    }
 
     /**
      * Restore a soft-deleted project.
