@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
-const props = defineProps<{
+defineProps<{
   projects: Project[]
 }>()
 

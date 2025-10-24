@@ -61,6 +61,8 @@ export interface Project {
     end_date: date
     project_leader: string
     contact_email: string
+    deleted_at?: string | null  // ✅ Added for soft deletes
+    program?: any               // ✅ Optional relationship
 }
 
 
