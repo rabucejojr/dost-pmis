@@ -181,8 +181,9 @@ public function update(Request $request, Project $project)
         $project = Project::onlyTrashed()->findOrFail($id);
         $project->restore();
 
+        // ✅ Redirect to that program’s project listing
         return redirect()
-            ->route('projects.index')
+            ->route('projects.index', ['program' => $project->program_id])
             ->with('success', '♻️ Project restored successfully.');
     }
 
