@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Program;
 use App\Models\Project;
-
+use function fake;
 class ProjectSeeder extends Seeder
 {
     public function run(): void
