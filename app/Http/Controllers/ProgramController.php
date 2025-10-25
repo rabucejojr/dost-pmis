@@ -6,11 +6,10 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+
 class ProgramController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         $programs = Program::select('id', 'program_name', 'description',  'slug', 'type')->get();

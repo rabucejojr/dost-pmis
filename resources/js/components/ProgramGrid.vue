@@ -1,90 +1,106 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Program } from '../types/index'
+import type { Program } from '@/types'
+import { ref, computed } from 'vue'
+import { router } from '@inertiajs/vue3'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Search } from 'lucide-vue-next'
 
 // Props definition
-defineProps<{
+const props = defineProps<{
   programs: Program[]
 }>()
 
-const selectedProgram = ref<null | Program>(null)
+// Search input
+const searchQuery = ref('')
 
-const openProgram = (program: Program) => {
-  selectedProgram.value = program
-}
+// Filtered list
+const filteredPrograms = computed(() => {
+  const search = searchQuery.value.trim().toLowerCase()
+  if (!search) return props.programs
 
-const closeProgram = () => {
-  selectedProgram.value = null
+  return props.programs.filter((p) => {
+    const name = p.program_name?.toLowerCase()
+    return name.includes(search)
+  })
+})
+
+// Navigate to selected program
+const viewProjects = (programId?: number) => {
+  if (!programId) return
+  router.get(`/projects?program=${programId}`, {}, {
+    preserveScroll: true,
+    preserveState: true,
+  })
 }
 </script>
 
 <template>
-  <div class="transition-colors duration-300 dark:bg-gray-900 min-h-screen p-4">
-    <!-- Grid List -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div
-        v-for="program in programs"
-        :key="program.id"
-        @click="openProgram(program)"
-        class="cursor-pointer bg-white dark:bg-gray-800 shadow-md rounded-xl p-5 hover:shadow-lg transition hover:scale-[1.02]"
-      >
-        <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400">
-          {{ program.program_name }}
-        </h3>
-        <p class="text-gray-700 dark:text-gray-300 text-sm mt-2 font-medium uppercase">
-          {{ program.type }}
+  <div class="transition-colors duration-300 dark:bg-gray-900 min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <!-- <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          DOST Programs
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">
+          Browse and explore active programs under DOST.
         </p>
-        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2 line-clamp-3">
-          {{ program.description }}
-        </p>
-      </div>
-    </div>
+      </div> -->
 
-    <!-- Modal for Program Details -->
-    <transition name="fade">
+      <!-- Search Bar -->
       <div
-        v-if="selectedProgram"
-        class="fixed inset-0 bg-gray-900/70 dark:bg-black/80 flex items-center justify-center z-50"
-        @click.self="closeProgram"
+        class="w-full sm:w-1/2 mx-auto mb-10 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700"
       >
-        <div
-          class="bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-lg p-6 text-gray-900 dark:text-gray-100"
-        >
-          <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-2">
-            {{ selectedProgram.program_name }}
-          </h2>
-          <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
-            {{ selectedProgram.description }}
-          </p>
-
-          <!-- Buttons -->
-          <div class="mt-3 flex justify-end space-x-3">
-            <button
-              @click="closeProgram"
-              class="bg-blue-700 dark:bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 dark:hover:bg-blue-700 transition"
-            >
-              View Projects
-            </button>
-            <button
-              @click="closeProgram"
-              class="bg-red-600 dark:bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 dark:hover:bg-red-600 transition"
-            >
-              Close
-            </button>
-          </div>
+        <Label for="search" class="sr-only">Search Programs</Label>
+        <div class="relative">
+          <Search class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+          <Input
+            id="search"
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search by program name..."
+            class="pl-9"
+          />
         </div>
       </div>
-    </transition>
+
+      <!-- Grid List -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          v-for="program in filteredPrograms"
+          :key="program.id"
+          @click="viewProjects(program.id)"
+          class="cursor-pointer bg-white dark:bg-gray-800 shadow-md rounded-xl p-5 hover:shadow-lg hover:scale-[1.02] transition"
+        >
+          <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400">
+            {{ program.program_name }}
+          </h3>
+          <p class="text-gray-700 dark:text-gray-300 text-sm mt-2 font-medium uppercase">
+            {{ program.type }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm mt-2 line-clamp-3">
+            {{ program.description }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div
+        v-if="filteredPrograms.length === 0"
+        class="text-center text-gray-500 dark:text-gray-400 py-20"
+      >
+        No matching programs found.
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

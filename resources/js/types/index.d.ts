@@ -31,6 +31,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    roles?: string[];
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;
@@ -45,5 +46,24 @@ export interface Program {
   slug: string
   type: string
 }
+
+export interface Project {
+    program: any;
+    id: number
+    program_id: number
+    user_id: number
+    title: string
+    description: string
+    location: string
+    status: string
+    budget: number
+    start_date: date
+    end_date: date
+    project_leader: string
+    contact_email: string
+    deleted_at?: string | null  // ✅ Added for soft deletes
+    program?: any               // ✅ Optional relationship
+}
+
 
 export type BreadcrumbItemType = BreadcrumbItem;

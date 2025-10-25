@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'program_id',
@@ -57,5 +58,13 @@ class Project extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function perspectives(): HasMany
+    {
+        return $this->hasMany(Perspective::class);
+    }
+    public function accomplishments()
+    {
+        return $this->hasMany(Accomplishment::class);
+    }
 
-} 
+}
