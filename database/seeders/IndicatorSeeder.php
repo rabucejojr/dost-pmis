@@ -7,13 +7,15 @@ use App\Models\Indicator;
 
 class IndicatorSeeder extends Seeder
 {
-    public function run(array $params = []): void
+   public function run(array $params = []): void
     {
-        $objective       = $params['objective'] ?? null;
-        $indicatorCount  = $params['indicator_count'] ?? 3;
+        $objective      = $params['objective'] ?? null;
+        $indicatorCount = $params['indicator_count'] ?? 3;
 
         if (!$objective) {
-            $this->command?->warn('⚠️ IndicatorSeeder skipped — no objective passed.');
+            if (app()->runningInConsole()) {
+                $this->command?->warn('⚠️ IndicatorSeeder skipped — no objective passed.');
+            }
             return;
         }
 
@@ -43,18 +45,19 @@ class IndicatorSeeder extends Seeder
             $label = $indicators[($i - 1) % count($indicators)];
 
             Indicator::create([
-                'objective_id'       => $objective->id,
-                'implementing_year'  => $year,
-                'name'               => $label,
-                'description'        => "Tracks performance for '{$objective->name}' under {$perspective->name}.",
-                'target_value'       => rand(5, 30),
-                'actual_value'       => rand(3, 25),
-                'unit'               => str_contains($label, '%') ? '%' : 'count',
-                'frequency'          => str_contains($label, '%') ? 'Annually' : 'Quarterly',
-                'code'               => "{$baseCode}-I-" . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'objective_id'      => $objective->id,
+                'implementing_year' => $year,
+                'name'              => $label,
+                'description'       => "Tracks performance for '{$objective->name}' under {$perspective->name}.",
+                'target_value'      => rand(5, 30),
+                'actual_value'      => rand(3, 25),
+                'unit'              => str_contains($label, '%') ? '%' : 'count',
+                'frequency'         => str_contains($label, '%') ? 'Annually' : 'Quarterly',
+                'code'              => "{$baseCode}-I-" . str_pad($i, 3, '0', STR_PAD_LEFT),
             ]);
         }
 
         $this->command?->info("✅ {$indicatorCount} indicators seeded for {$objective->name}");
     }
+
 }

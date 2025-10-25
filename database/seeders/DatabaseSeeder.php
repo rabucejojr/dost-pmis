@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Throwable;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,22 +12,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Optional: visually separate output in console
+        $this->command->info('Starting database seeding...');
 
-    //     User::factory()->create([
-    //         'name' => 'Test User',
-    //         'email' => 'test@example.com',
-    //     ]);
-
-        $this->call([
+        // List of all seeders to execute
+        $seeders = [
             ProgramSeeder::class,
             ProjectSeeder::class,
+            AccomplishmentSeeder::class,
             ProjectStaffSeeder::class,
             ActivitySeeder::class,
             RolePermissionSeeder::class,
-            PerspectiveSeeder::class,
-            ObjectiveSeeder::class,
-            IndicatorSeeder::class,
-        ]);
+        ];
+
+        foreach ($seeders as $seeder) {
+            try {
+                $this->command->info("Seeding: {$seeder}");
+                $this->call($seeder);
+                $this->command->info("Successfully seeded: {$seeder}\n");
+            } catch (Throwable $e) {
+                $this->command->error("Failed seeding: {$seeder}");
+                $this->command->error("   ↳ Error: " . $e->getMessage());
+
+                // Optional: Uncomment if you want to stop all seeding on failure
+                throw $e;
+            }
+        }
+
+        $this->command->info('🎉 Database seeding completed.');
     }
 }

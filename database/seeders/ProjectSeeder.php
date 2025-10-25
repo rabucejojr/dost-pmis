@@ -18,6 +18,8 @@ class ProjectSeeder extends Seeder
         }
 
         foreach ($programs as $program) {
+            $this->command?->info("🚀 Seeding projects for Program: {$program->name}");
+
             for ($i = 1; $i <= 3; $i++) {
                 $year = now()->year + ($i - 1);
 
@@ -39,16 +41,18 @@ class ProjectSeeder extends Seeder
                     'implementing_year' => $year,
                 ]);
 
-                // ✅ Proper Laravel 12 param passing with console binding
+                // ✅ Call PerspectiveSeeder for this project (triggers hierarchy)
                 app(PerspectiveSeeder::class)
                     ->setContainer(app())
                     ->setCommand($this->command)
                     ->run(['project' => $project]);
 
-                $this->command?->info("✅ Seeded project: {$project->title}");
+                $this->command?->info("🌱 Project seeded: {$project->title}");
             }
 
             $this->command?->info("🎯 3 projects seeded for Program: {$program->name}");
         }
+
+        $this->command?->info('✅ All programs processed successfully.');
     }
 }

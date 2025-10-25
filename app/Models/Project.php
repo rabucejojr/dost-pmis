@@ -62,5 +62,9 @@ class Project extends Model
     {
         return $this->hasMany(Perspective::class);
     }
+    public function accomplishments()
+    {
+        return $this->hasMany(Accomplishment::class);
+    }
 
 }

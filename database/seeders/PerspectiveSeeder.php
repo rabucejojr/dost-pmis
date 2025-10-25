@@ -12,53 +12,63 @@ class PerspectiveSeeder extends Seeder
         $project = $params['project'] ?? null;
 
         if (!$project) {
-            $this->command?->warn('⚠️ No project passed to PerspectiveSeeder.');
+            // Warn only when run directly (not part of chained call)
+            if (app()->runningInConsole()) {
+                $this->command?->warn('⚠️ PerspectiveSeeder skipped — no project passed.');
+            }
             return;
         }
 
         $year = $project->implementing_year;
-
         $perspectives = [
             [
-                'project_id'        => $project->id,
+                'project_id' => $project->id,
                 'implementing_year' => $year,
-                'name'              => 'Sustainable Development and Inclusive Growth',
-                'description'       => 'Focuses on sustainability and community empowerment.',
+                'name' => 'Customer Perspective',
+                'description' => 'Measures how well the organization delivers value and satisfaction to its customers.',
             ],
             [
-                'project_id'        => $project->id,
+                'project_id' => $project->id,
                 'implementing_year' => $year,
-                'name'              => 'Science, Technology, and Innovation Advancement',
-                'description'       => 'Promotes applied research and innovation.',
+                'name' => 'Internal Process Perspective',
+                'description' => 'Focuses on improving key operational processes that drive performance and quality.',
             ],
             [
-                'project_id'        => $project->id,
+                'project_id' => $project->id,
                 'implementing_year' => $year,
-                'name'              => 'Digital Transformation and Smart Communities',
-                'description'       => 'Advances e-governance and smart solutions.',
+                'name' => 'Learning and Growth Perspective',
+                'description' => 'Enhances employee skills, innovation, and organizational capacity for continuous improvement.',
             ],
             [
-                'project_id'        => $project->id,
+                'project_id' => $project->id,
                 'implementing_year' => $year,
-                'name'              => 'Human Resource Development and Institutional Capacity',
-                'description'       => 'Strengthens HR and institutional capability.',
+                'name' => 'Financial Perspective',
+                'description' => 'Evaluates financial performance and resource management to ensure sustainability and growth.',
             ],
         ];
 
         foreach ($perspectives as $index => $data) {
             $perspective = Perspective::create($data);
-            $this->command?->info("🌱 Perspective Created: {$perspective->name}");
+            $this->command?->info("Perspective Created: {$perspective->name}");
 
-            // ✅ Propagate parameters correctly
+            // Propagate chain
             app(ObjectiveSeeder::class)
                 ->setContainer(app())
                 ->setCommand($this->command)
                 ->run([
-                    'perspective'       => $perspective,
+                    'perspective' => $perspective,
                     'perspective_index' => $index + 1,
                 ]);
         }
 
-        $this->command?->info("✅ Seeded 4 perspectives for Project: {$project->title}");
+        $this->command?->info("4 perspectives seeded for Project: {$project->project_title}");
+        // ✅ Integrate AccomplishmentSeeder per project
+        app(AccomplishmentSeeder::class)
+            ->setContainer(app())
+            ->setCommand($this->command)
+            ->run([
+                'project' => $project, // Pass the project to link accomplishments
+            ]);
+        $this->command?->info("Financial accomplishments seeded for Project: {$project->project_title}");
     }
 }

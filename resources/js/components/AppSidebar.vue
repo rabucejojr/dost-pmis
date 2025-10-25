@@ -46,8 +46,8 @@ const adminNavItems: NavItem[] = [
     href: dashboard(),
     icon: Trophy,
     children: [
-      { title: 'Financial', href: route('projects.index', { program: 1 }) },
-      { title: 'Physical', href: route('projects.index', { program: 2 }) },
+        { title: 'Financial', href: route('financial.index') },
+        { title: 'Physical', href: route('projects.index', { program: 2 }) },
     ],
   },
   {
