@@ -15,7 +15,7 @@ defineProps<{
 
 <template>
   <div class="max-w-7xl mx-auto py-10">
-    <h2 class="text-2xl font-bold text-blue-700 mb-6">📚 DOST Programs</h2>
+    <h2 class="text-2xl font-bold text-blue-700 mb-6">DOST Programs</h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div

@@ -59,7 +59,7 @@ const viewProjects = (programId?: number) => {
             id="search"
             v-model="searchQuery"
             type="text"
-            placeholder="Search by name or description..."
+            placeholder="Search by program name..."
             class="pl-9"
           />
         </div>
