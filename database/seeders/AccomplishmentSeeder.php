@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Accomplishment;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use function fake;
 
 class AccomplishmentSeeder extends Seeder
 {
