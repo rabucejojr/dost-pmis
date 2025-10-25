@@ -47,7 +47,7 @@ const adminNavItems: NavItem[] = [
     icon: Trophy,
     children: [
         { title: 'Financial', href: route('financial.index') },
-        { title: 'Physical', href: route('projects.index', { program: 2 }) },
+        { title: 'Physical', href: route('physical.index') },
     ],
   },
   {
