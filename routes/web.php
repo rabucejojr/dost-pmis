@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AccomplishmentController;
+use App\Http\Controllers\PhysicalAccomplishmentController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\Guest\DashboardController as GuestDashboardController;
 
@@ -64,6 +65,8 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/{financial}', [AccomplishmentController::class, 'update'])->name('update');
             Route::delete('/{financial}', [AccomplishmentController::class, 'destroy'])->name('destroy');
         });
+        // Physical Accomplishments
+        Route::resource('physical', PhysicalAccomplishmentController::class);
     });
 
     // ==============================

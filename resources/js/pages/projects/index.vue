@@ -102,7 +102,10 @@ const archiveProject = async () => {
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 gap-4"
         >
           <div class="flex items-center gap-2">
-            <FolderKanban class="w-7 h-7 text-blue-600 dark:text-blue-400" />
+            <FolderKanban
+            class="text-blue-600 dark:text-blue-400 w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-9 lg:h-9"
+            />
+
             <div>
               <h1
                 class="text-3xl font-bold text-blue-700 dark:text-blue-400"
@@ -208,10 +211,12 @@ const archiveProject = async () => {
                 <User class="w-4 h-4 text-indigo-500" />
                 <span>{{ project.project_leader || '—' }}</span>
               </p>
-              <p class="flex items-center gap-2">
-                <Wallet class="w-4 h-4 text-green-500" />
-                <span>₱{{ project.budget?.toLocaleString() || 0 }}</span>
-              </p>
+            <p class="flex items-center gap-2">
+            <Wallet class="w-4 h-4 text-green-500" />
+            <span>
+                {{ new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(project.budget ?? 0) }}
+            </span>
+            </p>
               <p class="flex items-center gap-2">
                 <Clock class="w-4 h-4 text-yellow-500" />
                 <span>
