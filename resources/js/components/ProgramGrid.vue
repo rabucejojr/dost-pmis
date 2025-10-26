@@ -14,14 +14,15 @@ const props = defineProps<{
 // Search input
 const searchQuery = ref('')
 
-// Filtered list
+// Computed: Filter programs dynamically
 const filteredPrograms = computed(() => {
   const search = searchQuery.value.trim().toLowerCase()
   if (!search) return props.programs
 
   return props.programs.filter((p) => {
-    const name = p.program_name?.toLowerCase()
-    return name.includes(search)
+    const name = p.program_name?.toLowerCase() || ''
+    const desc = p.description?.toLowerCase() || ''
+    return name.includes(search) || desc.includes(search)
   })
 })
 
@@ -38,15 +39,6 @@ const viewProjects = (programId?: number) => {
 <template>
   <div class="transition-colors duration-300 dark:bg-gray-900 min-h-screen p-6">
     <div class="max-w-7xl mx-auto">
-      <!-- Header -->
-      <!-- <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-          DOST Programs
-        </h1>
-        <p class="text-gray-500 dark:text-gray-400 mt-1">
-          Browse and explore active programs under DOST.
-        </p>
-      </div> -->
 
       <!-- Search Bar -->
       <div
@@ -59,7 +51,7 @@ const viewProjects = (programId?: number) => {
             id="search"
             v-model="searchQuery"
             type="text"
-            placeholder="Search by program name..."
+            placeholder="Search by program name or description..."
             class="pl-9"
           />
         </div>
