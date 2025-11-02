@@ -2,20 +2,21 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Objective;
+use Illuminate\Database\Seeder;
 
 class ObjectiveSeeder extends Seeder
 {
     public function run(array $params = []): void
     {
         $perspective = $params['perspective'] ?? null;
-        $index       = $params['perspective_index'] ?? null;
+        $index = $params['perspective_index'] ?? null;
 
-        if (!$perspective || !$index) {
+        if (! $perspective || ! $index) {
             if (app()->runningInConsole()) {
                 $this->command?->warn('⚠️ ObjectiveSeeder skipped — missing perspective/index.');
             }
+
             return;
         }
 
@@ -30,10 +31,10 @@ class ObjectiveSeeder extends Seeder
 
         foreach ($objectives as $objIndex => $indicatorCount) {
             $objective = Objective::create([
-                'perspective_id'    => $perspective->id,
+                'perspective_id' => $perspective->id,
                 'implementing_year' => $perspective->implementing_year,
-                'name'              => "Objective " . ($objIndex + 1) . " under {$perspective->name}",
-                'description'       => "Supports goals of {$perspective->name}.",
+                'name' => 'Objective '.($objIndex + 1)." under {$perspective->name}",
+                'description' => "Supports goals of {$perspective->name}.",
             ]);
 
             $this->command?->info("📌 Objective Created: {$objective->name}");
@@ -42,12 +43,11 @@ class ObjectiveSeeder extends Seeder
                 ->setContainer(app())
                 ->setCommand($this->command)
                 ->run([
-                    'objective'       => $objective,
+                    'objective' => $objective,
                     'indicator_count' => $indicatorCount,
                 ]);
         }
 
-        $this->command?->info("✅ " . count($objectives) . " objectives seeded for {$perspective->name}");
+        $this->command?->info('✅ '.count($objectives)." objectives seeded for {$perspective->name}");
     }
-
 }

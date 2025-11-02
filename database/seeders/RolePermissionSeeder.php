@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserType;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
-use App\Models\User;
-use App\Enums\UserType;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -39,7 +39,7 @@ class RolePermissionSeeder extends Seeder
             // 2️⃣ Define roles and their permissions
             $roles = [
                 'Admin' => Permission::all()->pluck('name')->toArray(),
-                'User'  => ['view projects', 'create projects'],
+                'User' => ['view projects', 'create projects'],
                 'Guest' => ['view projects'],
             ];
 

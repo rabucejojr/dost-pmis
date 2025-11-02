@@ -6,16 +6,17 @@ use App\Enums\ProgramType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Program extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'program_name',
         'description',
         'slug',
         'type',
     ];
+
     protected $casts = [
         'type' => ProgramType::class,
     ];
@@ -24,9 +25,9 @@ class Program extends Model
     {
         return $this->type->label();
     }
-        public function projects()
+
+    public function projects()
     {
         return $this->hasMany(Project::class);
     }
-
 }

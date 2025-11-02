@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\ProjectStaff;
+use Illuminate\Database\Seeder;
 
 class ProjectStaffSeeder extends Seeder
 {
@@ -39,10 +39,10 @@ class ProjectStaffSeeder extends Seeder
             foreach ($selectedStaff as $staff) {
                 ProjectStaff::create([
                     'project_id' => $project->id,
-                    'name'       => $staff['name'],
-                    'position'   => $staff['position'],
+                    'name' => $staff['name'],
+                    'position' => $staff['position'],
                     'contact_no' => $staff['contact_no'],
-                    'email'      => $staff['email'],
+                    'email' => $staff['email'],
                 ]);
             }
         }

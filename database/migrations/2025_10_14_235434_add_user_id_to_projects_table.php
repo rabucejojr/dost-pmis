@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-             $table->foreignId('user_id')
-              ->nullable() // optional: remove if required
-              ->constrained()
-              ->onDelete('cascade')
-              ->after('program_id'); // position it after program_id
+            $table->foreignId('user_id')
+                ->nullable() // optional: remove if required
+                ->constrained()
+                ->onDelete('cascade')
+                ->after('program_id'); // position it after program_id
         });
     }
 

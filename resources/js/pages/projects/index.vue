@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue'
 import type { Program, Project } from '@/types'
-import { router } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import { route } from 'ziggy-js'
 import { Input } from '@/components/ui/input'
@@ -259,9 +259,9 @@ const archiveProject = async () => {
               <DialogTitle>Archive Project</DialogTitle>
               <DialogDescription>
                 Are you sure you want to archive
-                <span class="font-semibold text-blue-600 dark:text-blue-400">
+                <Link class="font-semibold text-blue-600 dark:text-blue-400">
                   {{ selectedProject?.title }}
-                </span>?
+                </Link>?
                 <br />
                 You can restore it later from the Archived Projects section.
               </DialogDescription>

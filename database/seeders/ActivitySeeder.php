@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Project;
 use App\Models\Activity;
+use App\Models\Project;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class ActivitySeeder extends Seeder
@@ -70,7 +70,7 @@ class ActivitySeeder extends Seeder
                     'rescheduled_date' => $rescheduledDate,
                     'remarks' => $status === 'rescheduled'
                         ? 'Activity has been rescheduled due to conflict in venue availability.'
-                        : Str::ucfirst($status) . ' successfully.',
+                        : Str::ucfirst($status).' successfully.',
                 ]);
             }
         }

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\ProgramType;
 use App\Models\Program;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProgramSeeder extends Seeder
@@ -15,7 +14,7 @@ class ProgramSeeder extends Seeder
     public function run(): void
     {
         //
-        $programs =[
+        $programs = [
             [
                 'program_name' => 'Small Enterprises Technology Upgrading Program',
                 'description' => 'SETUP program specifically targets micro, small, and medium enterprises (MSMEs) by providing financial support for the acquisition of technology to improve their operations, particularly in food processing and manufacturing.',

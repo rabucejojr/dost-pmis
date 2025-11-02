@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum UserType : string
+enum UserType: string
 {
     case ADMIN = 'admin';
     case USER = 'user';
@@ -10,11 +10,10 @@ enum UserType : string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::ADMIN => 'Administrator',
             self::USER => 'Registered User',
             self::GUEST => 'Guest User',
         };
     }
-
 }

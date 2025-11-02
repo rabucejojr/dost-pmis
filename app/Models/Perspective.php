@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Perspective extends Model
 {
@@ -37,15 +37,15 @@ class Perspective extends Model
     // Auto-generate code before creation
     protected static function booted()
     {
-   static::creating(function ($perspective) {
+        static::creating(function ($perspective) {
             // Ensure year is provided
-            if (!$perspective->implementing_year) {
+            if (! $perspective->implementing_year) {
                 throw new \Exception('Implementing year is required for Perspective.');
             }
 
             // Count only within the same year
             $count = self::where('implementing_year', $perspective->implementing_year)->count() + 1;
-            $perspective->code = "{$perspective->implementing_year}-P-" . str_pad($count, 2, '0', STR_PAD_LEFT);
+            $perspective->code = "{$perspective->implementing_year}-P-".str_pad($count, 2, '0', STR_PAD_LEFT);
         });
     }
 }

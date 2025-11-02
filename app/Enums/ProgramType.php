@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum ProgramType : string
+enum ProgramType: string
 {
     case SETUP = 'setup';
     case LGIA = 'lgia';
@@ -11,7 +11,7 @@ enum ProgramType : string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::SETUP => 'Small Enterprise Technology Upgrading Program',
             self::LGIA => 'Local Grants-in-Aid',
             self::CEST => 'Community Empowerment through Science and Technology',

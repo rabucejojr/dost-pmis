@@ -8,6 +8,12 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-vue-next'
+import { Program } from '../../types/index';
+
+const props = defineProps<{
+  program: Program
+}>()
+
 
 const form = useForm({
   title: '',
@@ -33,7 +39,8 @@ const statuses = [
   'unliquidated',
 ]
 
-const submit = () => form.post(route('projects.store'))
+const submit = () => form.post(route('programs.projects.store', { program: props.program.id }))
+
 </script>
 
 <template>
@@ -53,7 +60,7 @@ const submit = () => form.post(route('projects.store'))
         </div>
 
         <Link
-          :href="route('projects.index')"
+          :href="route('programs.projects.create', { program: program.id })"
           class="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline"
         >
           <ArrowLeft class="w-4 h-4" />

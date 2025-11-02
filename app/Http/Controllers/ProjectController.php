@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
 use App\Models\Program;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
-
     public function index(Request $request)
     {
         $programId = $request->query('program');
@@ -43,7 +42,7 @@ class ProjectController extends Controller
 
         // 🧠 Return Inertia page
         return Inertia::render('projects/index', [
-            'program'  => $program,
+            'program' => $program,
             'projects' => $projects,
         ]);
     }
@@ -63,26 +62,25 @@ class ProjectController extends Controller
     /**
      * Store a newly created project in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Program $program)
     {
         $validated = $request->validate([
-            'program_id'      => 'required|exists:programs,id',
-            'user_id'         => 'required|integer',
-            'title'           => 'required|string|max:255',
-            'description'     => 'nullable|string',
-            'location'        => 'required|string|max:255',
-            'status'          => 'required|string|max:50',
-            'budget'          => 'required|numeric|min:0',
-            'start_date'      => 'required|date',
-            'end_date'        => 'required|date|after_or_equal:start_date',
-            'project_leader'  => 'required|string|max:255',
-            'contact_email'   => 'required|email|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'location' => 'required|string|max:255',
+            'status' => 'required|string|max:50',
+            'budget' => 'required|numeric|min:0',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'project_leader' => 'required|string|max:255',
+            'contact_email' => 'required|email|max:255',
         ]);
 
+        $validated['program_id'] = $program->id;
         Project::create($validated);
 
         return redirect()
-            ->route('projects.index')
+            ->route('projects.index', ['program' => $program->id])
             ->with('success', 'Project created successfully.');
     }
 
@@ -107,7 +105,7 @@ class ProjectController extends Controller
         $programs = Program::select('id', 'program_name')->get();
 
         return Inertia::render('projects/edit', [
-            'project'  => $project,
+            'project' => $project,
             'programs' => $programs,
         ]);
     }
@@ -115,39 +113,38 @@ class ProjectController extends Controller
     /**
      * Update the specified project in storage.
      */
-public function update(Request $request, Project $project)
-{
-    $validated = $request->validate([
-        // 🧩 Optional foreign keys, validated only if present
-        'program_id'      => 'nullable|exists:programs,id',
-        'user_id'         => 'nullable|integer|exists:users,id',
+    public function update(Request $request, Project $project)
+    {
+        $validated = $request->validate([
+            // 🧩 Optional foreign keys, validated only if present
+            'program_id' => 'nullable|exists:programs,id',
+            'user_id' => 'nullable|integer|exists:users,id',
 
-        // 📝 Core project fields
-        'title'           => 'required|string|max:255',
-        'description'     => 'nullable|string',
-        'location'        => 'nullable|string|max:255',
-        'status'          => 'nullable|string|max:50',
-        'budget'          => 'nullable|numeric|min:0',
+            // 📝 Core project fields
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'location' => 'nullable|string|max:255',
+            'status' => 'nullable|string|max:50',
+            'budget' => 'nullable|numeric|min:0',
 
-        // 📅 Date fields
-        'start_date'      => 'nullable|date',
-        'end_date'        => 'nullable|date|after_or_equal:start_date',
+            // 📅 Date fields
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
 
-        // Leadership & contact
-        'project_leader'  => 'nullable|string|max:255',
-        'contact_email'   => 'nullable|email|max:255',
-    ]);
+            // Leadership & contact
+            'project_leader' => 'nullable|string|max:255',
+            'contact_email' => 'nullable|email|max:255',
+        ]);
 
-    // Update with validated data only
-    $project->update($validated);
+        // Update with validated data only
+        $project->update($validated);
 
-    return redirect()
-        ->route('projects.show', $project->id)
-        ->with('success', '✅ Project updated successfully.');
-}
+        return redirect()
+            ->route('projects.show', $project->id)
+            ->with('success', '✅ Project updated successfully.');
+    }
 
-
-  /**
+    /**
      * Soft delete the specified project.
      */
     public function destroy(Project $project)

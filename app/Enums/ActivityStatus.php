@@ -2,23 +2,23 @@
 
 namespace App\Enums;
 
-enum ActivityStatus :string
+enum ActivityStatus: string
 {
     //
-        // 'planned',
-        // 'ongoing',
-        // 'completed',
-        // 'cancelled',
-        // 'rescheduled',
-        case PLANNED = 'planned';
-        case ONGOING = 'ongoing';
-        case COMPLETED = 'completed';
-        case CANCELLED = 'cancelled';
-        case RESCHEDULED = 'rescheduled';
+    // 'planned',
+    // 'ongoing',
+    // 'completed',
+    // 'cancelled',
+    // 'rescheduled',
+    case PLANNED = 'planned';
+    case ONGOING = 'ongoing';
+    case COMPLETED = 'completed';
+    case CANCELLED = 'cancelled';
+    case RESCHEDULED = 'rescheduled';
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::PLANNED => 'Planned',
             self::ONGOING => 'Ongoing',
             self::COMPLETED => 'Completed',

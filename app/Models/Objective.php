@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Objective extends Model
 {
@@ -36,7 +36,7 @@ class Objective extends Model
         static::creating(function ($objective) {
             $perspective = $objective->perspective;
 
-            if (!$perspective) {
+            if (! $perspective) {
                 throw new \Exception('Perspective must exist before creating an Objective.');
             }
 
@@ -45,7 +45,7 @@ class Objective extends Model
 
             // Generate code within the same perspective
             $count = $perspective->objectives()->count() + 1;
-            $objective->code = "{$perspective->code}-O-" . str_pad($count, 3, '0', STR_PAD_LEFT);
+            $objective->code = "{$perspective->code}-O-".str_pad($count, 3, '0', STR_PAD_LEFT);
         });
 
         // Prevent changing year/code after creation
@@ -53,18 +53,17 @@ class Objective extends Model
 
             $perspective = $objective->perspective;
 
-            if (!$perspective) {
+            if (! $perspective) {
                 throw new \Exception('Perspective must exist before creating an Objective.');
             }
 
             $count = $perspective->objectives()->count() + 1;
-            $objective->code = "{$perspective->code}-O-" . str_pad($count, 2, '0', STR_PAD_LEFT);
+            $objective->code = "{$perspective->code}-O-".str_pad($count, 2, '0', STR_PAD_LEFT);
 
             if ($perspective->isDirty('implementing_year') || $perspective->isDirty('code')) {
                 throw new \Exception('Cannot modify implementing year or code after creation.');
             }
         });
-
 
         // Prevent editing year/code
         static::updating(function ($objective) {

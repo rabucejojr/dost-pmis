@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Perspective;
+use Illuminate\Database\Seeder;
 
 class PerspectiveSeeder extends Seeder
 {
@@ -11,11 +11,12 @@ class PerspectiveSeeder extends Seeder
     {
         $project = $params['project'] ?? null;
 
-        if (!$project) {
+        if (! $project) {
             // Warn only when run directly (not part of chained call)
             if (app()->runningInConsole()) {
                 $this->command?->warn('⚠️ PerspectiveSeeder skipped — no project passed.');
             }
+
             return;
         }
 

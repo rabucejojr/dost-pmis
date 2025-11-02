@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Indicator extends Model
@@ -40,14 +40,14 @@ class Indicator extends Model
         static::creating(function ($indicator) {
             $objective = $indicator->objective;
 
-            if (!$objective) {
+            if (! $objective) {
                 throw new \Exception('Objective must exist before creating an Indicator.');
             }
 
             $indicator->implementing_year = $objective->implementing_year;
 
             $count = $objective->indicators()->count() + 1;
-            $indicator->code = "{$objective->code}-I-" . str_pad($count, 3, '0', STR_PAD_LEFT);
+            $indicator->code = "{$objective->code}-I-".str_pad($count, 3, '0', STR_PAD_LEFT);
         });
 
         // 🚫 Prevent changing year/code

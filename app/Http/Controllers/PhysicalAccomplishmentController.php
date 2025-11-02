@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cr;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PhysicalAccomplishmentController extends Controller
 {

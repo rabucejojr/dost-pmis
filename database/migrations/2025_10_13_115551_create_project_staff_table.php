@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('project_staff', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')
-                  ->constrained('projects')
-                  ->onDelete('cascade'); // When project is deleted, its staff are removed too
+                ->constrained('projects')
+                ->onDelete('cascade'); // When project is deleted, its staff are removed too
             $table->string('name');
             $table->string('position');
             $table->string('contact_no')->nullable();

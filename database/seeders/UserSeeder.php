@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\UserType;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -14,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-               // 👨‍💼 Administrator
+        // 👨‍💼 Administrator
         User::updateOrCreate(
             ['email' => 'admin@dostsdn.gov.ph'],
             [

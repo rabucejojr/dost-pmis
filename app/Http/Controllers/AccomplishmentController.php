@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accomplishment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Accomplishment;
 
 class AccomplishmentController extends Controller
 {
@@ -20,7 +20,7 @@ class AccomplishmentController extends Controller
     //     ]);
     // }
 
-     public function index(Request $request)
+    public function index(Request $request)
     {
         // ✅ Allow search and filtering if needed
         $search = $request->input('search');
@@ -28,8 +28,8 @@ class AccomplishmentController extends Controller
         $accomplishments = Accomplishment::query()
             ->when($search, function ($query, $search) {
                 $query->where('project_title', 'like', "%{$search}%")
-                      ->orWhere('status', 'like', "%{$search}%")
-                      ->orWhere('implementing_year', 'like', "%{$search}%");
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('implementing_year', 'like', "%{$search}%");
             })
             ->orderBy('implementing_year', 'desc')
             ->paginate(10) // ✅ 10 per page
@@ -77,7 +77,7 @@ class AccomplishmentController extends Controller
     public function show(Accomplishment $financial)
     {
         return Inertia::render('accomplishments/financial/show', [
-            'accomplishment' => $financial
+            'accomplishment' => $financial,
         ]);
     }
 
@@ -87,7 +87,7 @@ class AccomplishmentController extends Controller
     public function edit(Accomplishment $financial)
     {
         return Inertia::render('accomplishments/financial/edit', [
-            'accomplishment' => $financial
+            'accomplishment' => $financial,
         ]);
     }
 

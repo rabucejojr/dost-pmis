@@ -1,15 +1,15 @@
 <?php
 
-use Inertia\Inertia;
+use App\Http\Controllers\AccomplishmentController;
+use App\Http\Controllers\Guest\DashboardController as GuestDashboardController;
+use App\Http\Controllers\PhysicalAccomplishmentController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Models\Program;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProgramController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\AccomplishmentController;
-use App\Http\Controllers\PhysicalAccomplishmentController;
-use App\Http\Controllers\User\DashboardController as UserDashboardController;
-use App\Http\Controllers\Guest\DashboardController as GuestDashboardController;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -29,11 +29,11 @@ Route::get('/dashboard', function () {
     ->middleware(['auth', 'role:Admin'])
     ->name('dashboard');
 
-Route::get('/user', fn() => Inertia::render('User'))
+Route::get('/user', fn () => Inertia::render('User'))
     ->middleware(['auth', 'role:User'])
     ->name('user');
 
-Route::get('/guest', fn() => Inertia::render('Guest'))
+Route::get('/guest', fn () => Inertia::render('Guest'))
     ->middleware(['auth', 'role:Guest'])
     ->name('guest');
 
@@ -84,5 +84,5 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

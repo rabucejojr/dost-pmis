@@ -2,29 +2,30 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Indicator;
+use Illuminate\Database\Seeder;
 
 class IndicatorSeeder extends Seeder
 {
-   public function run(array $params = []): void
+    public function run(array $params = []): void
     {
-        $objective      = $params['objective'] ?? null;
+        $objective = $params['objective'] ?? null;
         $indicatorCount = $params['indicator_count'] ?? 3;
 
-        if (!$objective) {
+        if (! $objective) {
             if (app()->runningInConsole()) {
                 $this->command?->warn('⚠️ IndicatorSeeder skipped — no objective passed.');
             }
+
             return;
         }
 
         $perspective = $objective->perspective;
-        $year        = $perspective->implementing_year ?? now()->year;
+        $year = $perspective->implementing_year ?? now()->year;
 
         $perspectiveCode = str_pad($perspective->id, 3, '0', STR_PAD_LEFT);
-        $objectiveCode   = str_pad($objective->id, 3, '0', STR_PAD_LEFT);
-        $baseCode        = "{$year}-P-{$perspectiveCode}-O-{$objectiveCode}";
+        $objectiveCode = str_pad($objective->id, 3, '0', STR_PAD_LEFT);
+        $baseCode = "{$year}-P-{$perspectiveCode}-O-{$objectiveCode}";
 
         $indicators = [
             'No. of research projects completed',
@@ -45,19 +46,18 @@ class IndicatorSeeder extends Seeder
             $label = $indicators[($i - 1) % count($indicators)];
 
             Indicator::create([
-                'objective_id'      => $objective->id,
+                'objective_id' => $objective->id,
                 'implementing_year' => $year,
-                'name'              => $label,
-                'description'       => "Tracks performance for '{$objective->name}' under {$perspective->name}.",
-                'target_value'      => rand(5, 30),
-                'actual_value'      => rand(3, 25),
-                'unit'              => str_contains($label, '%') ? '%' : 'count',
-                'frequency'         => str_contains($label, '%') ? 'Annually' : 'Quarterly',
-                'code'              => "{$baseCode}-I-" . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'name' => $label,
+                'description' => "Tracks performance for '{$objective->name}' under {$perspective->name}.",
+                'target_value' => rand(5, 30),
+                'actual_value' => rand(3, 25),
+                'unit' => str_contains($label, '%') ? '%' : 'count',
+                'frequency' => str_contains($label, '%') ? 'Annually' : 'Quarterly',
+                'code' => "{$baseCode}-I-".str_pad($i, 3, '0', STR_PAD_LEFT),
             ]);
         }
 
         $this->command?->info("✅ {$indicatorCount} indicators seeded for {$objective->name}");
     }
-
 }

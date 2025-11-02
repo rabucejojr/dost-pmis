@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
                 $this->command->info("Successfully seeded: {$seeder}\n");
             } catch (Throwable $e) {
                 $this->command->error("Failed seeding: {$seeder}");
-                $this->command->error("   ↳ Error: " . $e->getMessage());
+                $this->command->error('   ↳ Error: '.$e->getMessage());
 
                 // Optional: Uncomment if you want to stop all seeding on failure
                 throw $e;

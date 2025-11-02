@@ -44,6 +44,7 @@ class Project extends Model
     {
         return $this->hasMany(ProjectStaff::class);
     }
+
     // app/Models/Project.php
     public function activities(): HasMany
     {
@@ -54,17 +55,19 @@ class Project extends Model
     {
         return $this->hasMany(Document::class);
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
+
     public function perspectives(): HasMany
     {
         return $this->hasMany(Perspective::class);
     }
+
     public function accomplishments()
     {
         return $this->hasMany(Accomplishment::class);
     }
-
 }

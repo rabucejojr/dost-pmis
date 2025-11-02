@@ -47,8 +47,9 @@ class ShowSeedData extends Command
         $modelClass = "App\\Models\\{$modelName}";
 
         // Check if the given model actually exists
-        if (!class_exists($modelClass)) {
+        if (! class_exists($modelClass)) {
             $this->error("Model {$modelName} does not exist in App\\Models.");
+
             return self::FAILURE;
         }
 
@@ -67,7 +68,7 @@ class ShowSeedData extends Command
          */
         if ($filter = $this->option('filter')) {
             [$field, $value] = explode('=', $filter, 2);
-            if (!empty($field) && !empty($value)) {
+            if (! empty($field) && ! empty($value)) {
                 $query->where($field, 'like', "%{$value}%");
             }
         }
@@ -89,6 +90,7 @@ class ShowSeedData extends Command
         // If no records were found, show a warning and exit successfully
         if ($records->isEmpty()) {
             $this->warn("No records found in {$modelName}.");
+
             return self::SUCCESS;
         }
 
@@ -106,7 +108,7 @@ class ShowSeedData extends Command
          * - Automatically handles Enums (e.g., App\Enums\ProjectStatus)
          * - Converts arrays/objects safely into strings
          */
-        $this->info("Showing " . $records->count() . " record(s) from {$modelName}:");
+        $this->info('Showing '.$records->count()." record(s) from {$modelName}:");
         $this->table(
             $columns,
             $records->map(function ($record) use ($columns) {
@@ -125,7 +127,7 @@ class ShowSeedData extends Command
                         $value = json_encode($value);
                     }
                     // Handle non-stringable objects (avoid exceptions)
-                    elseif (is_object($value) && !method_exists($value, '__toString')) {
+                    elseif (is_object($value) && ! method_exists($value, '__toString')) {
                         $value = get_class($value);
                     }
 

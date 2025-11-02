@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum ProjectStatus : string
+enum ProjectStatus: string
 {
     //
     case ONGOING = 'ongoing';
@@ -16,7 +16,7 @@ enum ProjectStatus : string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::ONGOING => 'ongoing',
             self::COMPLETED => 'completed',
             self::TERMINATED => 'terminated',

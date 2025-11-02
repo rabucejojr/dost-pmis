@@ -31,7 +31,7 @@ class Accomplishment extends Model
     // Accessors & scopes (same as before)
     public function getFormattedBudgetAttribute(): string
     {
-        return '₱' . number_format($this->budget_utilized, 2);
+        return '₱'.number_format($this->budget_utilized, 2);
     }
 
     public function getStatusLabelAttribute(): string

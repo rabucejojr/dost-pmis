@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Project;
 use App\Models\Accomplishment;
-use Illuminate\Support\Carbon;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+
 use function fake;
 
 class AccomplishmentSeeder extends Seeder
@@ -20,6 +21,7 @@ class AccomplishmentSeeder extends Seeder
 
         if ($project) {
             $this->seedForProject($project);
+
             return;
         }
 
@@ -28,6 +30,7 @@ class AccomplishmentSeeder extends Seeder
 
         if ($projects->isEmpty()) {
             $this->command?->warn('⚠️ No projects found — please seed Projects first.');
+
             return;
         }
 
@@ -50,11 +53,11 @@ class AccomplishmentSeeder extends Seeder
 
         foreach (range(1, $count) as $i) {
             Accomplishment::create([
-                'project_id'        => $project->id,
-                'project_title'     => $project->title,
+                'project_id' => $project->id,
+                'project_title' => $project->title,
                 'implementing_year' => Carbon::parse($project->start_date)->year,
                 'budget_utilized' => round($project->budget * fake()->randomFloat(2, 0.3, 0.9), 2),
-                'status'            => $project->status,
+                'status' => $project->status,
             ]);
         }
 
